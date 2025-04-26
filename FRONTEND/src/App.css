@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@tailwind utilities;
+
+/* Custom reusable class */
+.input-style {
+    @apply pl-3 text-base pr-5 py-2 w-full border-2 border-gray-600 rounded-md focus:ring-1 focus:ring-gray-400;
+}
+  
+.label-style {
+    @apply ml-1 my-2 text-base;
+}
+
+
+/* Global body styles */
+body {
+  @apply bg-[#10172a] text-white font-serif;
+}
+
+.loader {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #444;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
