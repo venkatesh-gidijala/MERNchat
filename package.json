@@ -1,0 +1,20 @@
+{
+  "name": "chat-application",
+  "version": "1.0.0",
+  "description": "Full-stack chat application",
+  "scripts": {
+    "install-backend": "cd backend && npm install",
+    "install-frontend": "cd frontend && npm install",
+    "build-frontend": "cd frontend && npm run build",
+    "start-backend": "cd backend && npm start",
+    "dev": "concurrently \"npm run start-backend\" \"cd frontend && npm run dev\"",
+    "build": "npm run install-backend && npm run install-frontend && npm run build-frontend",
+    "start": "npm run start-backend"
+  },
+  "dependencies": {
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
