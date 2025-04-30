@@ -8,12 +8,69 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import UserBox from '../SubComponents/UserBox';
 import { motion } from "framer-motion";
+import Setname from '../SubComponents/Setname';
 function TopBar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const {user,localchats,setlocalchats,notification,setnotifications,setactivechat} = ChatState();
+  const {user,localchats,setlocalchats,notification,setnotifications,setactivechat,fetchTrigger} = ChatState();
   const [searchuser,setsearchuser] = useState("")
   const [resultsearchchats,setresultsearchchats] = useState([])
   const [notificationsopen,setnotificationsopen] = useState(false)
+
+  const handleFetchNotifications = async ()=>{
+      const Token = user.data.token;
+      if (!Token) {
+        toast.error("No authentication token found.");
+        return;
+      }
+      const config = {
+        headers: {
+          Authorization: `Bearer ${Token}`
+        }
+      };
+      try{
+        const res = await axios.get("http://localhost:3001/ChatTogether/notification/getnotifications",config)
+        if (Array.isArray(res.data)) {
+          setnotifications(res.data); 
+        } else if (Array.isArray(res.data.data)) {
+          setnotifications(res.data.data); 
+        } else {
+          toast.error("Invalid notification format from server.");
+        }
+        console.log(res.data) 
+      }catch(error){
+        console.error(error);
+        console.log("fail to fetchnotifications")
+      }
+  }
+  const HandleRemoveNotification = async (data) => {
+    const Token = user.data.token;
+      if (!Token) {
+        toast.error("No authentication token found.");
+        return;
+      }
+      const config = {
+        headers: {
+          Authorization: `Bearer ${Token}`
+        }
+      };
+      try{
+        const res = await axios.delete(`http://localhost:3001/ChatTogether/notification/removenotifications?chatId=${data._id}`,config)
+        console.log("notification removed successfully")
+      }catch(error){
+        console.log(error);
+        console.log("fail to remove notifications")
+      }
+      setactivechat(data);
+      setnotificationsopen(!notificationsopen);
+      setnotifications((prev) => prev.filter((d) => d._id !== data._id));
+  };
+
+
+  useEffect(() => {
+    handleFetchNotifications();
+  }, [fetchTrigger]);
+
+
   const HandleSearchResults = async () => {
     const Token = user.data.token;
     if (!Token) {
@@ -36,8 +93,7 @@ function TopBar() {
       toast.error("Failed to fetch users. Please try again.");
     }
   };
-  console.log("notification"+notification)
-  console.log(notification)
+
   useEffect(()=>{
     const delay = setTimeout(()=>{
       HandleSearchResults()
@@ -51,11 +107,6 @@ function TopBar() {
      setresultsearchchats([])
   }
 
-  const HandleOpenNotification = async (data) => {
-    setactivechat(data.chat);
-    setnotificationsopen(!notificationsopen);
-    setnotifications((prev) => prev.filter((d) => d._id !== data._id));
-  };
 
 
   const HandleCreateChat = async(userId,username) =>{
@@ -106,35 +157,65 @@ function TopBar() {
             />
           </div>
 
-          {notificationsopen && (
+         {notificationsopen && (
             <motion.div
               initial={{ opacity: 0, y: -5 }}
               animate={{ opacity: 1, y: 0 }}
-              className="absolute right-0 mt-2 w-64 rounded-xl bg-white shadow-lg ring-1 ring-black ring-opacity-5 z-50"
+              className="absolute right-0 mt-2 w-74 rounded-xl bg-white shadow-lg ring-1 ring-black ring-opacity-5 z-50"
             >
-              <div className="p-4">
-                <h4 className="font-semibold text-sm text-gray-700 mb-2 flex justify-center">
+              <div className="p-2">
+                <h4 className="font-semibold text-sm text-gray-700 mb-2 text-center">
                   Notifications
                 </h4>
-                {notification.length === 0 ? <div className='text-black'>No Notifications</div>
-                :
-                <>
+
+                {notification.length === 0 ? (
+                  <div className="text-black text-center">No Notifications</div>
+                ) : (
                   <ul className="space-y-2">
-                    {notification.map((n)=>{
-                      return(
-                        <li className="text-sm text-gray-600" key={n._id}>
-                          {n.chat.isGroupChat===true?
-                          <><div className='text-black p-2 bg-amber-500 rounded-lg flex justify-center' onClick={()=>HandleOpenNotification(n)}>new message in new message in {n.chat.chatName}</div></>:
-                          <><div className='text-black p-2 bg-amber-500 rounded-lg flex justify-center' onClick={()=>HandleOpenNotification(n)}>new message from {n.sender.username}</div></>}
-                        </li>
-                      )
-                    })}
+                    {notification.map((n) => (
+                      <li className="text-sm text-gray-600" key={n._id}>
+                        <div
+                          className="text-black p-2 bg-amber-500 rounded-lg flex items-center gap-2 cursor-pointer"
+                          onClick={() => HandleRemoveNotification(n)}
+                        >
+                          <span className="bg-red-600 text-white text-xs font-bold rounded-full px-2 py-0.5">
+                            {n.count}
+                          </span>
+
+                          {n.isGroupChat ? (
+                            <>
+                              <span className="text-sm font-semibold">
+                                new message in
+                              </span>
+                              <span
+                                className="truncate max-w-[100px] text-black font-semibold overflow-hidden whitespace-nowrap"
+                                title={n.chatName}
+                              >
+                                {n.chatName}
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="text-sm font-semibold">
+                                new message from
+                              </span>
+                              <span
+                                className="truncate max-w-[100px] text-black font-semibold overflow-hidden whitespace-nowrap"
+                                title={n.latestMessage.sender.username}
+                              >
+                                {n.latestMessage.sender.username}
+                              </span>
+                            </>
+                          )}
+                        </div>
+                      </li>
+                    ))}
                   </ul>
-                </>
-                }
+                )}
               </div>
             </motion.div>
           )}
+
         </div>
         <div>
           <Avatar
@@ -195,10 +276,3 @@ function TopBar() {
 }
 
 export default TopBar;
-
-
-
-
-
-
-

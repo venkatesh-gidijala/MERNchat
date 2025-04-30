@@ -60,7 +60,7 @@ const Creategroup = AsyncHandler(async(req,res)=>{
     if(!req.body.Users || !req.body.chatName){
         return res.status(400).send({message:"fill all the fields"})
     }
-    const Users = req.body.Users;
+    let Users = req.body.Users;
     if (typeof Users === "string") {
         try {
             Users = JSON.parse(Users);

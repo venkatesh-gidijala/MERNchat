@@ -10,6 +10,7 @@ const ChatProvider = ({children}) =>{
     const [localchats,setlocalchats] = useState([])
     const [activechat,setactivechat] = useState("")
     const [notification,setnotifications] = useState([])
+    const [fetchTrigger, setFetchTrigger] = useState(false);
 
 
     const allowedPathsForGuests = ["/", "/login"];
@@ -27,7 +28,7 @@ const ChatProvider = ({children}) =>{
 
 
     return(
-    <Chatcontext.Provider value={{user,setuser,activechat,setactivechat,localchats,setlocalchats,notification,setnotifications}}>
+    <Chatcontext.Provider value={{user,setuser,activechat,setactivechat,localchats,setlocalchats,notification,setnotifications,fetchTrigger, setFetchTrigger}}>
         {children}
     </Chatcontext.Provider>
     )

@@ -6,7 +6,7 @@ import Setname from '../SubComponents/Setname';
 import UserBox from '../SubComponents/UserBox';
 import Strip from '../Customcomponents/strip';
 export default function LeftChat( {fetch}) {
-  const {user,activechat,setactivechat,localchats,setlocalchats} = ChatState();
+  const {user,activechat,setactivechat,localchats,setlocalchats,notification} = ChatState();
   const [activategroupchat,setactivategroupchat] = useState(false);
   const [groupname,setgroupname] = useState("");
   const [groupmembers,setgroupmembers] = useState([]);
@@ -49,7 +49,7 @@ export default function LeftChat( {fetch}) {
           };
           const {data} = await axios.get('http://localhost:3001/ChatTogether/chat/fetchchat',config)
           setlocalchats(data);  
-          console.log(data)
+          // console.log(data)
         }catch(err){
         console.error(err);
         toast.error("Failed to fetch users. Please try again.");
@@ -106,7 +106,6 @@ export default function LeftChat( {fetch}) {
     setgroupmembers([])
     setsearchuser("")
   }
-
   const handleActivateChat = (chat) => {
     setactivechat(chat);
     setlocalchats((prevChats) => {
@@ -131,7 +130,7 @@ export default function LeftChat( {fetch}) {
 
   useEffect(()=>{
     fetchchats();
-  },[fetch])
+  },[fetch,notification])
 
   return (
     <><div className='overflow-x-hidden '>

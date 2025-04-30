@@ -12,7 +12,7 @@ export default function RightChat({fetch,setfetch}) {
   const [socket,setsocket] = useState(null)
   // const [selectchatcompare,setselectchatcompare] = useState(null)
   const ENDPOINT = "http://localhost:3001"
-  const {user,activechat,setactivechat, notification,setnotifications} = ChatState();
+  const {user,activechat,setactivechat, setFetchTrigger} = ChatState();
   const [editmode,seteditmode] = useState(false);
   const [groupname,setgroupname] = useState(activechat.chatName);
   const [groupmembers,setgroupmembers] = useState([]);
@@ -50,18 +50,45 @@ export default function RightChat({fetch,setfetch}) {
   useEffect(() => {
   if (!socket) return;
 
+  const HandleAddtonotification = async(newMessageRecieved) => {
+  if(!newMessageRecieved) return;
+  const Token = user.data.token;
+  if (!Token) {
+    toast.error("No authentication token found.");
+    return;
+  }
+  const config = {
+    headers: {
+      Authorization: `Bearer ${Token}`
+    }
+  };
+  try {
+    const { data } = await axios.post(
+      `http://localhost:3001/ChatTogether/notification?chatId=${newMessageRecieved.chat._id}`,
+      {}, 
+      config 
+    );
+    // setnotifications((prev) => {
+    //   const alreadyExists = prev.some(
+    //     (msg) => msg._id === newMessageRecieved.chat._id
+    //   );
+    //   if (!alreadyExists) {
+    //     return [data, ...prev];
+    //   }
+    //   return prev;
+    // });
+    setfetch((prev) => !prev);
+    setFetchTrigger(prev => !prev);
+  } catch(error) {
+    console.log(error);
+    return toast.error("Error while adding a notification");
+  }
+}
+
   const handleNewMessage = (newMessageRecieved) => {
     if (!activechat || activechat._id !== newMessageRecieved.chat._id) {
-      setnotifications((prev) => {
-        const alreadyExists = prev.some(
-          (msg) => msg._id === newMessageRecieved._id
-        );
-        if (!alreadyExists) {
-          return [newMessageRecieved, ...prev];
-        }
-        return prev;
-      });
-      setfetch((prev) => !prev);
+      console.log("New message received in a different chat:", newMessageRecieved);
+      HandleAddtonotification(newMessageRecieved);
     } else {
       setuserMessages((prev) => [...prev, newMessageRecieved]);
     }
@@ -97,7 +124,6 @@ export default function RightChat({fetch,setfetch}) {
     }catch(error){
       return toast.error('Error while Sending Message')
     }
-
   }
 
   const HandelFitechChats = async()=>{
