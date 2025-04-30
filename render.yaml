@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: chat-together
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20.17.0
+      - key: PORT
+        value: 3001
+      - key: MONGO_URL
+        fromDatabase:
+          name: chat-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+
+databases:
+  - name: chat-db
+    plan: free
+    type: mongodb
