@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Full-stack chat application",
   "scripts": {
-    "install-backend": "cd BACKEND && npm install",
-    "install-frontend": "cd FRONTEND && npm install",
-    "build-frontend": "cd FRONTEND && npm run build",
-    "start-backend": "cd BACKEND && npm start",
+    "install-BACKEND": "cd BACKEND && npm install",
+    "install-FRONTEND": "cd FRONTEND && npm install",
+    "build-FRONTEND": "cd FRONTEND && npm run build",
+    "start-BACKEND": "cd BACKEND && npm start",
     "dev": "concurrently \"npm run start-BACKEND\" \"cd FRONTEND && npm run dev\"",
     "build": "npm run install-BACKEND && npm run install-FRONTEND && npm run build-FRONTEND",
     "start": "npm run start-BACKEND"
