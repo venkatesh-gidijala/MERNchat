@@ -28,7 +28,7 @@ function TopBar() {
         }
       };
       try{
-        const res = await axios.get("http://localhost:3001/ChatTogether/notification/getnotifications",config)
+        const res = await axios.get("https://chatapp2-0-ss0n.onrender.com/ChatTogether/notification/getnotifications",config)
         if (Array.isArray(res.data)) {
           setnotifications(res.data); 
         } else if (Array.isArray(res.data.data)) {
@@ -54,7 +54,7 @@ function TopBar() {
         }
       };
       try{
-        const res = await axios.delete(`http://localhost:3001/ChatTogether/notification/removenotifications?chatId=${data._id}`,config)
+        const res = await axios.delete(`https://chatapp2-0-ss0n.onrender.com/ChatTogether/notification/removenotifications?chatId=${data._id}`,config)
         console.log("notification removed successfully")
       }catch(error){
         console.log(error);
@@ -84,7 +84,7 @@ function TopBar() {
     };
     try {
       if(searchuser.length!==0){
-        const {data}  = await axios.get(`http://localhost:3001/ChatTogether/user?search=${searchuser}`, config);
+        const {data}  = await axios.get(`https://chatapp2-0-ss0n.onrender.com/ChatTogether/user?search=${searchuser}`, config);
         setresultsearchchats(data);
         console.log(resultsearchchats)
       }
@@ -121,7 +121,7 @@ function TopBar() {
       }
     };
     try{
-      const {data} = await axios.post('http://localhost:3001/ChatTogether/chat/',{userId},config)
+      const {data} = await axios.post('https://chatapp2-0-ss0n.onrender.com/ChatTogether/chat/',{userId},config)
       if(!localchats.find((chat)=> chat._id === data._id)) setlocalchats([data,...localchats]);
       setactivechat(data)
       toast.success(`chat with ${username} created succesfull`)

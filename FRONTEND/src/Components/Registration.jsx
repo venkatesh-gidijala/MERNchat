@@ -46,7 +46,7 @@ function Registration() {
     }else{
       formData.append('profile',profile)
     }
-    axios.post('http://localhost:3001/ChatTogether/user/',formData
+    axios.post('https://chatapp2-0-ss0n.onrender.com/ChatTogether/user/',formData
     ).then((res)=>{
       toast.success("Registration successful!")
       setUserName('')

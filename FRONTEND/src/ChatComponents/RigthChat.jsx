@@ -64,7 +64,7 @@ export default function RightChat({fetch,setfetch}) {
   };
   try {
     const { data } = await axios.post(
-      `http://localhost:3001/ChatTogether/notification?chatId=${newMessageRecieved.chat._id}`,
+      `https://chatapp2-0-ss0n.onrender.com/ChatTogether/notification?chatId=${newMessageRecieved.chat._id}`,
       {}, 
       config 
     );
@@ -116,7 +116,7 @@ export default function RightChat({fetch,setfetch}) {
           Authorization:`Bearer ${token}`
         }
       }
-      const {data} = await axios.post('http://localhost:3001/ChatTogether/Message/',{content:message,chatId:activechat._id},config)
+      const {data} = await axios.post('https://chatapp2-0-ss0n.onrender.com/ChatTogether/Message/',{content:message,chatId:activechat._id},config)
       socket.emit("new Message",data)
       setMessage('')
       setuserMessages((prev) => [...prev,data])
@@ -139,7 +139,7 @@ export default function RightChat({fetch,setfetch}) {
           Authorization: `Bearer ${Token}`,
         },
       };
-      const {data} = await axios.get(`http://localhost:3001/ChatTogether/Message/${activechat._id}`,config)
+      const {data} = await axios.get(`https://chatapp2-0-ss0n.onrender.com/ChatTogether/Message/${activechat._id}`,config)
       setuserMessages(data)
       if (socket) {
         socket.emit("join private chat", activechat._id);
@@ -197,7 +197,7 @@ const HandelTypingInput = (e) => {
         },
       };
       const { data } = await axios.put(
-        'http://localhost:3001/ChatTogether/chat/groupadd',
+        'https://chatapp2-0-ss0n.onrender.com/ChatTogether/chat/groupadd',
         {
           chatId: activechat._id,
           userId: userToAdd._id, 
@@ -232,7 +232,7 @@ const HandelTypingInput = (e) => {
             Authorization: `Bearer ${Token}`
           }
         };
-        const {data} = await axios.put('http://localhost:3001/ChatTogether/chat/groupremove',
+        const {data} = await axios.put('https://chatapp2-0-ss0n.onrender.com/ChatTogether/chat/groupremove',
           {chatId:activechat._id,userId:Removinguser._id},config)
           setactivechat(data);
           setfetch(!fetch)
@@ -259,7 +259,7 @@ const HandelTypingInput = (e) => {
             Authorization: `Bearer ${Token}`
           }
         };
-        const data = await axios.put('http://localhost:3001/ChatTogether/chat/rename',{ChatId:activechat._id,NewChatName:groupname},config)
+        const data = await axios.put('https://chatapp2-0-ss0n.onrender.com/ChatTogether/chat/rename',{ChatId:activechat._id,NewChatName:groupname},config)
         toast.success("Rename Group Succesfull")
           setactivechat((prev) => ({
               ...prev,
@@ -286,7 +286,7 @@ const HandelTypingInput = (e) => {
     };
     try {
       if(searchuser.length!==0){
-        const {data}  = await axios.get(`http://localhost:3001/ChatTogether/user?search=${searchuser}`, config);
+        const {data}  = await axios.get(`https://chatapp2-0-ss0n.onrender.com/ChatTogether/user?search=${searchuser}`, config);
         setsearchresults(data);
       }
     } catch (err) {
@@ -310,7 +310,7 @@ const HandelTypingInput = (e) => {
       };
 
       const { data } = await axios.put(
-        'http://localhost:3001/ChatTogether/chat/groupremove',
+        'https://chatapp2-0-ss0n.onrender.com/ChatTogether/chat/groupremove',
         {
           chatId: activechat._id,
           userId: user.data._id  // Remove self

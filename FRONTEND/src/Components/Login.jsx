@@ -21,7 +21,7 @@ function Login() {
 
   const Handlesubmit = (e) =>{
     e.preventDefault()
-    axios.post('http://localhost:3001/ChatTogether/user/login',{
+    axios.post('https://chatapp2-0-ss0n.onrender.com/ChatTogether/user/login',{
       username: userName,
       password: password
     }).then((res)=>{

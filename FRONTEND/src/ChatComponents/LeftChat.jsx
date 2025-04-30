@@ -26,7 +26,7 @@ export default function LeftChat( {fetch}) {
     };
     try {
       if(searchuser.length!==0){
-        const {data}  = await axios.get(`http://localhost:3001/ChatTogether/user?search=${searchuser}`, config);
+        const {data}  = await axios.get(`https://chatapp2-0-ss0n.onrender.com/ChatTogether/user?search=${searchuser}`, config);
         setsearchresults(data);
       }
     } catch (err) {
@@ -47,7 +47,7 @@ export default function LeftChat( {fetch}) {
               Authorization: `Bearer ${Token}`
             }
           };
-          const {data} = await axios.get('http://localhost:3001/ChatTogether/chat/fetchchat',config)
+          const {data} = await axios.get('https://chatapp2-0-ss0n.onrender.com/ChatTogether/chat/fetchchat',config)
           setlocalchats(data);  
           // console.log(data)
         }catch(err){
@@ -74,7 +74,7 @@ export default function LeftChat( {fetch}) {
           Authorization: `Bearer ${Token}`
         }
       };
-      const {data} = await axios.post('http://localhost:3001/ChatTogether/chat/group',{
+      const {data} = await axios.post('https://chatapp2-0-ss0n.onrender.com/ChatTogether/chat/group',{
       chatName:groupname,
       Users: groupmembers.map((u) => u._id)
       },config)
