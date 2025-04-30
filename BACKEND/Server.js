@@ -22,16 +22,15 @@ app.use('/ChatTogether/message',MessageRoute)
 app.use('/ChatTogether/notification',NotificationRoute)
 
 
-const __dirname1 = path.resolve(); 
+const __dirname1 = path.resolve();  
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname1, "/FRONTEND/dist")));
+  app.use(express.static(path.join(__dirname1, 'FRONTEND', 'dist')));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname1, "FRONTEND", "dist", "index.html"));
+    res.sendFile(path.resolve(__dirname1, 'FRONTEND', 'dist', 'index.html'));
   });
-}
-else {
+} else {
   app.get("/", (req, res) => {
     res.send("API is running successfully");
   });
