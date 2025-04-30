@@ -1,7 +1,10 @@
 const asyncHandler = require("express-async-handler")
 const userModel = require('../models/UserModel')
 const generateToken = require('../MiddleWare/generateToken')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs');
+
+
+
 
 const Registraion = asyncHandler(async (req, res) => {
   try {
