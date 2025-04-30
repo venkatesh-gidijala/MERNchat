@@ -11,7 +11,7 @@ import { BeatLoader } from 'react-spinners';
 export default function RightChat({fetch,setfetch}) {
   const [socket,setsocket] = useState(null)
   // const [selectchatcompare,setselectchatcompare] = useState(null)
-  const ENDPOINT = "http://localhost:3001"
+  const ENDPOINT = "https://chatapp2-0-ss0n.onrender.com"
   const {user,activechat,setactivechat, setFetchTrigger} = ChatState();
   const [editmode,seteditmode] = useState(false);
   const [groupname,setgroupname] = useState(activechat.chatName);
