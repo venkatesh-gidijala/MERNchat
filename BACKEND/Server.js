@@ -4,9 +4,8 @@ const dotenv = require('dotenv');
 const app = express();
 // app.use(cors());
 app.use(cors({
-  origin: 'https://chatapp2-0-ss0n.onrender.com', // Replace with your frontend URL
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type'],
+  origin: ["https://chatapp2-0-ss0n.onrender.com", "http://localhost:5173", "http://localhost:5174"],
+  credentials: true
 }));
 app.use(express.json());
 dotenv.config();
@@ -49,17 +48,13 @@ const server = app.listen(PORT,()=>{
 })
 
 const io = require('socket.io')(server, {
-  pingTimeout: 50000,
+  pingTimeout: 60000,
   cors: {
-    origin: [
-      // "http://localhost:5173",         
-      // "http://localhost:5174",    
-      "https://chatapp2-0-ss0n.onrender.com" 
-    ],
-    credentials: true
+    origin: ["https://chatapp2-0-ss0n.onrender.com", "http://localhost:5173", "http://localhost:5174"],
+    credentials: true,
+    methods: ["GET", "POST"]
   }
 });
-
 
 io.on("connection", (socket) => {
   console.log("New client connected");
