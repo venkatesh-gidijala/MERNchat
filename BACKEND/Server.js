@@ -2,7 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const app = express();
-app.use(cors());
+// app.use(cors());
+app.use(cors({
+  origin: 'https://chatapp2-0-ss0n.onrender.com', // Replace with your frontend URL
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
+}));
 app.use(express.json());
 dotenv.config();
 const path = require("path")
@@ -49,7 +54,7 @@ const io = require('socket.io')(server, {
     origin: [
       // "http://localhost:5173",         
       // "http://localhost:5174",    
-      "https://your-frontend-url.com" 
+      "https://chatapp2-0-ss0n.onrender.com" 
     ],
     credentials: true
   }
