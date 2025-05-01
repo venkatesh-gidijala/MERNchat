@@ -47,8 +47,8 @@ const io = require('socket.io')(server, {
   pingTimeout: 50000,
   cors: {
     origin: [
-      "http://localhost:5173",         
-      "http://localhost:5174",    
+      // "http://localhost:5173",         
+      // "http://localhost:5174",    
       "https://your-frontend-url.com" 
     ],
     credentials: true
