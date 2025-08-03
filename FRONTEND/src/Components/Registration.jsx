@@ -85,7 +85,6 @@ function Registration() {
     setPassword('');
     setProfile('');
     setpreview('');
-    toast.info("📝 Redirecting to login...");
     navigate('/login');
   }
 };
