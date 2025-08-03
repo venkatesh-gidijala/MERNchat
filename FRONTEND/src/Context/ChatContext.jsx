@@ -11,7 +11,7 @@ const ChatProvider = ({children}) =>{
     const [activechat,setactivechat] = useState("")
     const [notification,setnotifications] = useState([])
     const [fetchTrigger, setFetchTrigger] = useState(false);
-
+    const [selected, setselected] = useState(1);
 
     const allowedPathsForGuests = ["/", "/login"];
     useEffect(()=>{
@@ -28,7 +28,7 @@ const ChatProvider = ({children}) =>{
 
 
     return(
-    <Chatcontext.Provider value={{user,setuser,activechat,setactivechat,localchats,setlocalchats,notification,setnotifications,fetchTrigger, setFetchTrigger}}>
+    <Chatcontext.Provider value={{user,setuser,activechat,setactivechat,localchats,setlocalchats,notification,setnotifications,fetchTrigger, setFetchTrigger,selected, setselected}}>
         {children}
     </Chatcontext.Provider>
     )

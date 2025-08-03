@@ -376,8 +376,13 @@ const HandelTypingInput = (e) => {
   }
   return (
     <>
-
-      <div className="w-full h-full bg-[#1E40AF] p-1 rounded-xl text-white flex flex-col">
+      <div className="w-full h-full bg-[#1E40AF] p-1 rounded-xl text-white flex flex-col "
+         style={{
+          backgroundImage: `linear-gradient(rgba(30, 64, 175, 0.6), rgba(30, 64, 175, 0.6)), url('https://res-console.cloudinary.com/ds9cdbved/thumbnails/v1/image/upload/v1749622984/YmctZm9yLWNoYXRhcHBfaWpqZGx0/drilldown')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}>
         {activechat ? (
           <>
             <div className="flex items-center gap-4 mb-2">

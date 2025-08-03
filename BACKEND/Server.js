@@ -2,6 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const app = express();
+app.use(express.urlencoded({ extended: true }));
+// const multer = require('multer');
+// const upload = multer();
+
+// For parsing multipart/form-data
+// app.use(upload.none());
 // app.use(cors());
 app.use(cors({
   origin: ["https://chatapp2-0-ss0n.onrender.com", "http://localhost:5173", "http://localhost:5174"],

@@ -1,37 +1,49 @@
 const asyncHandler = require("express-async-handler")
-const userModel = require('../models/UserModel')
+// const userlogins = require('../models/userlogins')
+const userlogins = require('../models/UserModel') 
 const generateToken = require('../MiddleWare/generateToken')
 const bcrypt = require('bcryptjs');
 
-
-
-
-const Registraion = asyncHandler(async (req, res) => {
+const Registration = asyncHandler(async (req, res) => {
   try {
-    const { userName, email, password ,profile} = req.body;
-    const userExists = await userModel.findOne({email:email});
-    if (userExists) {
-      return res.status(400).json({ error: 'Username already exists' });
-    }
+    const { userName, email, password, profile } = req.body;
+    
     if (!userName || !email || !password) {
       return res.status(400).json({ error: 'All fields are required' });
     }
-    const hashPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new userModel({
+    const emailExists = await userlogins.findOne({ email });
+    if (emailExists) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
+    
+    const usernameExists = await userlogins.findOne({ username: userName });
+    if (usernameExists) {
+      return res.status(400).json({ message: 'Username already exists' });
+    }
+
+    const hashPassword = await bcrypt.hash(password, 10);
+    const newUser = new userlogins({
       username: userName,
       email,
       password: hashPassword,
       profile
     });
     const savedUser = await newUser.save();
-    if(savedUser){
-        const token = generateToken(savedUser._id)
-        res.status(200).json(savedUser,token);
-        console.log(token)
+    if (savedUser) {
+      const token = generateToken(savedUser._id);
+      
+      return res.status(200).json({
+        _id: savedUser._id,
+        username: savedUser.username,
+        email: savedUser.email,
+        profile: savedUser.profile,
+        token: token,
+      });
     }
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Registration error:', err);
+    return res.status(500).json({ error: err.message });
   }
 });
 
@@ -39,7 +51,7 @@ const Registraion = asyncHandler(async (req, res) => {
 const Login = asyncHandler(async (req, res) => {
     const { username, password } = req.body;
     try {
-        const user = await userModel.findOne({ username });
+        const user = await userlogins.findOne({ username });
         if (!user) {
         return res.status(400).json({ message: 'User not found' });
         }
@@ -71,11 +83,11 @@ const searchusers = asyncHandler(async(req,res)=>{
       ]
     }:{};
     try{
-      const users = await userModel.find(keyword).find({ _id: { $ne: req.user._id } });
+      const users = await userlogins.find(keyword).find({ _id: { $ne: req.user._id } });
       res.send(users);
     } catch (err) {
       res.status(500).json({ message: "Error fetching users" });
     }
 })
 
-module.exports = {Registraion,Login,searchusers}
+module.exports = {Registration,Login,searchusers}

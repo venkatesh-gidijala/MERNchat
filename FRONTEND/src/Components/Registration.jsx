@@ -22,50 +22,75 @@ function Registration() {
   //         }
   // },[navigate])
 
-  const Handlesubmit = async(e) =>{
-    e.preventDefault()
-    setLoader(true)
-    const formData = new FormData();
-    formData.append('userName', userName);
-    formData.append('email', email);
-    formData.append('password', password);
-    if(profile){
-      const profileFormalData = new FormData();
-      profileFormalData.append('file',profile);
-      profileFormalData.append('upload_preset','chat-app');
-      try{
-        const result = await fetch('https://api.cloudinary.com/v1_1/ds9cdbved/image/upload',{
-          method:"POST",
-          body:profileFormalData
-        })
-        const profileData = await result.json()
-        formData.append('profile',profileData.secure_url);
-      }catch(error){
-        console.log(error)
-      }
-    }else{
-      formData.append('profile',profile)
-    }
-    axios.post('https://chatapp2-0-ss0n.onrender.com/ChatTogether/user/',formData
-    ).then((res)=>{
-      toast.success("Registration successful!")
-      setUserName('')
-      setEmail('')  
-      setPassword('')
-      setProfile('')
-      setpreview('')
-      setLoader(false)
-      navigate('/login')
-    }).catch((err)=>{
-      if (err.response && err.response.data.message) {
-        toast.error(err.response.data.message); 
-      } else {
-        toast.error("UserName or Email Already used");
-      }
-    }).finally(()=>{
-      setLoader(false)
-    })
+ const Handlesubmit = async (e) => {
+  e.preventDefault();
+  setLoader(true);
+
+  // ✅ Validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!userName || userName.trim().length < 3) {
+    toast.error("❌ Username must be at least 3 characters long");
+    setLoader(false);
+    return;
   }
+
+  if (!email || !emailRegex.test(email)) {
+    toast.error("❌ Please enter a valid email address");
+    setLoader(false);
+    return;
+  }
+
+  if (!password || password.length < 6) {
+    toast.error("❌ Password must be at least 6 characters long");
+    setLoader(false);
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('userName', userName);
+  formData.append('email', email);
+  formData.append('password', password);
+
+  if (profile) {
+    const profileFormalData = new FormData();
+    profileFormalData.append('file', profile);
+    profileFormalData.append('upload_preset', 'chat-app');
+
+    try {
+      const result = await fetch('https://api.cloudinary.com/v1_1/ds9cdbved/image/upload', {
+        method: "POST",
+        body: profileFormalData
+      });
+      const profileData = await result.json();
+      formData.append('profile', profileData.secure_url);
+    } catch {
+      toast.error("⚠️ Profile image upload failed");
+    }
+  } else {
+    formData.append('profile', '');
+  }
+
+  try {
+    await axios.post('https://chatapp2-0-ss0n.onrender.com/ChatTogether/user/', formData);
+    toast.success("✅ Registration successful!");
+  } catch (err) {
+    // const message = err?.response?.data?.message || err?.response?.data?.error || "❌ Registration failed";
+    // toast.error(message);
+    // return;
+  } finally {
+    setLoader(false);
+    setUserName('');
+    setEmail('');
+    setPassword('');
+    setProfile('');
+    setpreview('');
+    toast.info("📝 Redirecting to login...");
+    navigate('/login');
+  }
+};
+
+
   const HandleProfileChange = (e) =>{
     const file = e.target.files[0];
     if(file){
@@ -75,8 +100,8 @@ function Registration() {
   }
   return (
     <>
-        <div className="border-2 border-gray-500 shadow-md shadow-gray-500 rounded-2xl mx-auto lg:w-1/3 sm:w-2/3 md:w-1/2  
-            flex flex-col justify-center items-center mt-10 p-10 selection:bg-gray-600">
+        <div className="border-2 border-gray-500 shadow-md shadow-gray-500 rounded-2xl mx-6 md:mx-auto lg:w-1/3 sm:w-2/3 md:w-1/2  
+            flex flex-col justify-center items-center mt-30 md:mt-10 p-10 selection:bg-gray-600">
           <form className="w-full flex flex-col" onSubmit={Handlesubmit}>
               <h2 className="text-center mb-4 sm:text-xl md:text-2xl lg:text-3xl font-black pb-3">Registration</h2>
               <div className='flex flex-row justify-center items-center mb-2'>
@@ -101,7 +126,7 @@ function Registration() {
                 <CustomInput  placeholder='Enter Your Password' className={"w-full"} type={showPassword?"text":"password"}  autoComplete="current-password" onchange={(e)=> setPassword(e.target.value)}/>
                 <button className="flex flex-row border-2 border-gray-600 p-2 ml-1 rounded-lg cursor-pointer focus:ring-1 focus:ring-gray-400"  type="button"onClick={()=>setShowPassword(!showPassword)}>{showPassword?<Eye className="m-0.5" size="20"/>:<EyeOff className="m-0.5" size="20"/>}</button>
               </div>   
-              <button disabled={setLoader} className='border-2 border-gray-800 mt-10 bg-gray-800 text-white flex justify-center item center 
+              <button  disabled={loader} className='border-2 border-gray-800 mt-10 bg-gray-800 text-white flex justify-center item center 
               rounded-lg py-2 px-3 hover:bg-gray-700 hover:border-2 hover:border-gray-500 cursor-pointer' type='submit'> {loader && <div className="loader"></div>}
   {loader ? 'Registering...' : 'Register'}</button>
               <h2 className='mt-6 ml-3 flex justify-center align-center'>Already Have An Account ?<Link to='/Login' className='ml-2 text-blue-500 hover:text-blue-700'>Login</Link></h2>
