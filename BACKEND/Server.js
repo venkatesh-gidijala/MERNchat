@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 // app.use(upload.none());
 // app.use(cors());
 app.use(cors({
-  origin: ["https://chatapp2-0-ss0n.onrender.com", "http://localhost:5173", "http://localhost:5174"],
+  origin: ["https://chat-app-6wuj.onrender.com", "http://localhost:5173", "http://localhost:5174"],
   credentials: true
 }));
 app.use(express.json());
